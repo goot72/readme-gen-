@@ -1,6 +1,9 @@
 // TODO: Include packages needed for this application
 const inquirer = require("inquirer");
 const fs = require("fs");
+const { title } = require("process");
+const { isFunction } = require("util");
+const { error } = require("console");
 // TODO: Create an array of questions for user input
 const questions = [
     {
@@ -85,90 +88,79 @@ inquirer.prompt([
         message: "What is your email address?",
         name: "email"
     },
-    
 
+]
+).then(({
+    title,
+    description,
+    installation,
+    usage,
+    contribution,
+    test,
+    license,
+    username,
+    email,
+})=>{
+const template = `# ${title}
+* [title](#title)
+* [description](#description)
+* [installation](#installation)
+* [usage](#usage)
+* [contribution](#contribution)
+* [test](#test)
+* [license](#license)
+* [username](#username)
+* [email](#email)
 
-]).then((data) =>{
-const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        main{
-            justify-content: center;
-            
-            padding-bottom: 10px;
-            font-size: 36px;
+## Description
+${description}
+
+## Installation
+${installation}
+
+## usage
+${usage}
+
+## Contribution
+${contribution}
+
+## Test
+${test}
+
+## License
+${license}
+
+## Contact
+* Git :${username}
+* Email :${email}`;
+
+createNewFile(title,template);
+     
+}
+);
+function createNewFile(fileName, data) {
+    fs.writeFile(`./${fileName.toLowerCase().split(" ").join("")}.md`, data,()=>{
+        if(error){
+            console.log(error);
         }
-    </style>
-</head>
-<body>
-<header>
-    <h1>license: ${data.license}</h1>
-    <main>
-        <section>
-            # ${data.title} 
-        </section>
-       <section>
-       ## Description
-        </section>
-        <section>
-        ${data.description}
-        </section>
-         <section>
-         ## Installation
-         </section>
-        <section>
-        ${data.installation}
-        </section>
-        <section>
-        Usage
-         </section>
-        <section>
-        ## ${data.usage}
-        </section>
-        <section>
-        ## Contribution
-         </section>
-        <section>
-        ${data.contribution}
-        </section>
-        <section>
-        ## Test
-         </section>
-        <section>
-        ${data.test}
-        </section>
-       <section>
-       ## Questions
-        </section>
-        <section>
-        GitHub Username: ${data.username}
-        </section>
-        <section>
-        Email: ${data.email}
-        </section>
-        
-
-    </main>
-</body>
-</html>`; 
-
-console.log(html); 
-fs.writeFileSync("readmeGenerator.html",html);
-})
-// TODO: Create a function to write README file
-function writeToFile(fileName, data) {
-
-
-
+        console.log("Your README has been generated");
+    })
 }
 
-// TODO: Create a function to initialize app
-function init() {}
 
-// Function call to initialize app
-init();
+// console.log(html); 
+// fs.writeFileSync("readmeGenerator.md",markDown);s
+// })
+// // TODO: Create a function to write README file
+// function writeToFile(fileName, data) {
+
+
+
+// }
+
+// // TODO: Create a function to initialize app
+// function init() {}
+
+// // Function call to initialize app
+// init();
 
